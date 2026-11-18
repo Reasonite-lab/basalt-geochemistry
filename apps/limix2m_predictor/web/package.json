@@ -1,0 +1,9 @@
+{
+  "name": "limix2m-web-demo",
+  "version": "1.1.1",
+  "private": true,
+  "description": "LimiX-2M 构造环境判别工具 Web Demo",
+  "scripts": {
+    "dev": "\"D:\\AI地学\\.venv_tabular_20261002\\Scripts\\python.exe\" server.py --port 7100"
+  }
+}

@@ -44,7 +44,9 @@
 
 ## 可移植性
 
-打包为 PyInstaller onedir 便携目录：目标电脑无需安装 Python，将整个文件夹（约 8.3 GB）拷贝或压缩传输后即可直接运行 `LimiX2MPredictor.exe`。要求 Windows 10/11 64 位；检测到 NVIDIA 显卡走 GPU，否则自动回退 CPU（速度较慢）。
+- **GPU 版**（约 8.3 GB，CUDA torch）：拷贝整个文件夹到 Windows 10/11 x64 机器即可，无需安装 Python；需要 NVIDIA 显卡 + CUDA 驱动；
+- **CPU 版**（约 1 GB，`tools/build_cpu.py` 构建）：任何 Windows x64 机器可运行，无需显卡；
+- 另有**网页 demo**（`web/`，FastAPI + 单页前端）：本机运行 `run.bat` 或 `npm run dev` 后浏览器访问 `http://localhost:7100/`，功能与桌面版一致；推理核心与桌面版完全相同。
 
 ## 说明
 
