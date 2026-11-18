@@ -7,6 +7,7 @@ import queue
 import subprocess
 import sys
 import threading
+import time
 import traceback
 from pathlib import Path
 
@@ -14,6 +15,7 @@ import numpy as np
 import pandas as pd
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
+from version import APP_VERSION, MODEL_NAME
 
 from d36_predictor_core import (
     APP_DIR,
@@ -147,7 +149,7 @@ class ManualInputDialog(tk.Toplevel):
 class D36App(tk.Tk):
     def __init__(self) -> None:
         super().__init__()
-        self.title("D36 未知样品构造环境判别工具")
+        self.title(f"D36 未知样品构造环境判别工具 v{APP_VERSION}")
         self.geometry("1460x900")
         self.minsize(1160, 740)
         self.configure(bg=BG)
@@ -225,7 +227,7 @@ class D36App(tk.Tk):
         badge.pack(side="right", padx=28, pady=18)
         tk.Label(
             badge,
-            text="冻结研究模型  v1.0",
+            text=f"LightGBM · v{APP_VERSION}",
             fg="white",
             bg="#214B68",
             font=("Microsoft YaHei UI", 10, "bold"),
@@ -767,6 +769,46 @@ class D36App(tk.Tk):
 
 
 def main() -> None:
+    if "--gui-smoke-test" in sys.argv:
+        output_dir = APP_DIR / "portable_gui_test"
+        if "--output-dir" in sys.argv:
+            output_dir = Path(sys.argv[sys.argv.index("--output-dir") + 1]).resolve()
+        output_dir.mkdir(parents=True, exist_ok=True)
+        app = D36App()
+        app.withdraw()
+
+        def wait_until(predicate, label: str) -> None:
+            deadline = time.monotonic() + 90
+            while time.monotonic() < deadline:
+                app.update()
+                if predicate():
+                    return
+                time.sleep(0.05)
+            raise TimeoutError(f"GUI smoke timeout: {label}")
+
+        try:
+            wait_until(lambda: app.engine is not None, "engine")
+            app._load_example()
+            app._start_analysis()
+            wait_until(lambda: app.result is not None, "analysis")
+            assert len(app.probability_tree.get_children()) == len(app.input_table)
+            assert len(app.region_tree.get_children()) == len(app.engine.region_groups)
+            assert len(app.reference_tree.get_children()) == len(app.engine.reference_groups)
+            assert app.last_output is not None and app.last_output.exists()
+            report = {
+                "status": "PASS", "version": APP_VERSION,
+                "frozen_executable": bool(getattr(sys, "frozen", False)),
+                "probability_rows": len(app.probability_tree.get_children()),
+                "region_rows": len(app.region_tree.get_children()),
+                "reference_rows": len(app.reference_tree.get_children()),
+                "excel_export": True,
+            }
+            (output_dir / "gui_smoke_report.json").write_text(
+                json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8"
+            )
+        finally:
+            app.destroy()
+        return
     if "--self-test" in sys.argv:
         input_path: Path | None = None
         output_dir = APP_DIR / "portable_self_test"
@@ -781,8 +823,21 @@ def main() -> None:
         output_path = output_dir / "portable_self_test_result.xlsx"
         export_result(result, output_path)
         probability = result.probabilities[[f"P_{name}" for name in CLASSES]].to_numpy(float)
+        replay_error = None
+        if input_path is None:
+            replay = engine.analyze(frame, use_spatial_prior=True, aggregate_top_n=5)
+            expected = pd.read_csv(BUNDLE_DIR / "example_predictions.csv")
+            replay_error = float(np.max(np.abs(
+                replay.probabilities[[f"P_{name}" for name in CLASSES]].to_numpy(float)
+                - expected[[f"prob_{name}" for name in CLASSES]].to_numpy(float)
+            )))
+            if replay_error > 1e-12:
+                raise RuntimeError(f"Frozen probability replay mismatch: {replay_error}")
         report = {
             "status": "PASS",
+            "version": APP_VERSION,
+            "model": MODEL_NAME,
+            "frozen_probability_replay_max_abs_error": replay_error,
             "frozen_executable": bool(getattr(sys, "frozen", False)),
             "executable": str(Path(sys.executable).resolve()),
             "resource_dir": str(Path(getattr(sys, "_MEIPASS", APP_DIR)).resolve()),

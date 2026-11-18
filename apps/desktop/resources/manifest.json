@@ -1,0 +1,82 @@
+{
+  "version": "1.0.2",
+  "model": "GeoSinglePrior-D36-v1",
+  "model_training_rows": 16076,
+  "retrieval_library_rows": 16346,
+  "archives": [
+    {
+      "file": "d36_full_seed_20261005.zip",
+      "bytes": 6582892,
+      "sha256": "eee5781e75abca478d229249a34d9eabe5ba27bcc7400cfe3cf9e8efcb6bfac5"
+    },
+    {
+      "file": "d36_full_seed_20261006.zip",
+      "bytes": 6588525,
+      "sha256": "9031c2246d1850781e1c57d2e8b3a5f3f7d447f45e5798ba3243ae8f6c650fc8"
+    },
+    {
+      "file": "d36_full_seed_20261007.zip",
+      "bytes": 6590244,
+      "sha256": "6327343fc8b4082caeb2d5f513cf05805b774f1358e590f5cbc592ab5591de0f"
+    },
+    {
+      "file": "support.zip",
+      "bytes": 2428686,
+      "sha256": "047024291d078157fdb9a271a4b8da74072ebc96ddcdb4308f3e4feebb8ec9ea"
+    }
+  ],
+  "files": [
+    {
+      "path": "geosingle_bundle/d36_full_seed_20261005.txt",
+      "sha256": "f02105d8afd1006796e45f61bdbeafd34dde43861c58e9c7c3751b49a50f3273"
+    },
+    {
+      "path": "geosingle_bundle/d36_full_seed_20261006.txt",
+      "sha256": "3077ac4fe736d228add2da4edc08fe622b522909df2545efc13f6ed0e7859bc2"
+    },
+    {
+      "path": "geosingle_bundle/d36_full_seed_20261007.txt",
+      "sha256": "391cc141d3133b7bb698aa478569accf0a5a1bf0e6cdad36d3314272d9853253"
+    },
+    {
+      "path": "geosingle_bundle/bundle.json",
+      "sha256": "4655c2603b0da526340891eb7e8a34f20fc15ba09a68cb38f19b81a90e17bd63"
+    },
+    {
+      "path": "geosingle_bundle/example_input.csv",
+      "sha256": "dc76be153b7028356b9b943249867b56f92ebf0284030f3c2504ad9d51f23d3e"
+    },
+    {
+      "path": "geosingle_bundle/example_predictions.csv",
+      "sha256": "6b80199ae90923faae0aed22729fab1a4d92fd1e2940a1da5435d29795450766"
+    },
+    {
+      "path": "geosingle_bundle/example_predictions.csv.audit.json",
+      "sha256": "ee7aed30018bdb2fede57f842d73dd7894af99fd46bc5186cf7344b49f556547"
+    },
+    {
+      "path": "geosingle_bundle/province_spatial_library.npz",
+      "sha256": "5b76ebd7e31c71d074892dd8c740d97653f4db6a1c91f6b0df30dcd15ac815b7"
+    },
+    {
+      "path": "geosingle_bundle/README.md",
+      "sha256": "275914527df2355673a587bfcae2f91e6ae25727a766fc1474a4b7925787df17"
+    },
+    {
+      "path": "geosingle_bundle/validation_replay.json",
+      "sha256": "afe29fa0cd70eecfb1ec20e14034c6f0e88b43f3e1de00a0bd863178675514fb"
+    },
+    {
+      "path": "geosingle_bundle/verification.json",
+      "sha256": "35c925004725e3c5d9fb89d5ad380c4a21a7a73b18a0f962194d9a2bb9f06c6a"
+    },
+    {
+      "path": "retrieval_library_v1.json",
+      "sha256": "24db0a8d473a20909591a7875b0148524e6ffd870d7c4d51fb89d74cb5f0a4c7"
+    },
+    {
+      "path": "retrieval_library_v1.npz",
+      "sha256": "762c8a0671b500152d173c8c36c380c31f9f3f9c080d28af6461b46d5c0c4790"
+    }
+  ]
+}
