@@ -135,5 +135,6 @@
       "source_sha256": "3ca241f90cca5ebd7f0a95397e4bfaed082feee0c23b9070596f5072f3e2ad70",
       "repository_sha256": "3dbc1e5a48552084a0c73f23a76c76b73b0d47707fa1d573c3dbe78581df7e4a"
     }
-  ]
+  ],
+  "repository_hash_basis": "Git blob bytes, UTF-8 with LF line endings."
 }
