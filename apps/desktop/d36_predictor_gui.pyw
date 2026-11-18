@@ -67,7 +67,7 @@ class ManualInputDialog(tk.Toplevel):
         ).pack(anchor="w", padx=24, pady=(12, 0))
         tk.Label(
             header,
-            text="所有36个元素必须为正数；经纬度可以留空。",
+            text="元素留空表示缺测；最低要求全部10项主量加8项微量（共≥18项）；经纬度可留空。",
             font=("Microsoft YaHei UI", 10),
             fg="#D8E8F2",
             bg=NAVY,

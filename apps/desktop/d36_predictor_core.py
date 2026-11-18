@@ -110,32 +110,41 @@ def helmert_basis(dimension: int = 10) -> np.ndarray:
     return basis
 
 
+MAJORS = E36[:10]
+TRACES = E36[10:]
+MIN_MEASURED = 18           # 全部10项主量 + 至少8项微量（D18 下限）
+MIN_TRACES_MEASURED = 8
+
+
 def build_d36_74(raw: np.ndarray) -> tuple[np.ndarray, list[str]]:
+    """D36_74 features; missing elements are NaN and propagate into derived features."""
     raw = np.asarray(raw, dtype=float)
     if raw.ndim != 2 or raw.shape[1] != len(E36):
         raise ValueError(f"D36矩阵必须为 n×{len(E36)}。")
-    if not np.isfinite(raw).all() or not (raw > 0).all():
-        raise ValueError("36个元素必须全部为有限正数。")
-    log36 = np.log10(raw)
-    positions = {element: index for index, element in enumerate(E36)}
-    parts: list[np.ndarray] = [log36, log36[:, :10] @ helmert_basis(10).T]
-    names = ["log_" + element for element in E36]
-    names += [f"ilr_major_{index + 1}" for index in range(9)]
-    for left, right in RATIO_PAIRS:
-        parts.append(
-            (log36[:, positions[left]] - log36[:, positions[right]])[:, None]
-        )
-        names.append(f"logratio_{left}_over_{right}")
-    for numerator, left, right, name in [
-        ("EU(PPM)", "SM(PPM)", "GD(PPM)", "Eu_anomaly"),
-        ("CE(PPM)", "LA(PPM)", "PR(PPM)", "Ce_anomaly"),
-    ]:
-        anomaly = log36[:, positions[numerator]] - 0.5 * (
-            log36[:, positions[left]] + log36[:, positions[right]]
-        )
-        parts.append(anomaly[:, None])
-        names.append(name)
-    features = np.column_stack(parts).astype(np.float32)
+    present = np.isfinite(raw)
+    if (present & (raw <= 0)).any():
+        raise ValueError("已测量的元素必须为有限正数；未测量请留空。")
+    with np.errstate(invalid="ignore", divide="ignore"):
+        log36 = np.where(present, np.log10(np.where(present, raw, 1.0)), np.nan)
+        positions = {element: index for index, element in enumerate(E36)}
+        parts: list[np.ndarray] = [log36, log36[:, :10] @ helmert_basis(10).T]
+        names = ["log_" + element for element in E36]
+        names += [f"ilr_major_{index + 1}" for index in range(9)]
+        for left, right in RATIO_PAIRS:
+            parts.append(
+                (log36[:, positions[left]] - log36[:, positions[right]])[:, None]
+            )
+            names.append(f"logratio_{left}_over_{right}")
+        for numerator, left, right, name in [
+            ("EU(PPM)", "SM(PPM)", "GD(PPM)", "Eu_anomaly"),
+            ("CE(PPM)", "LA(PPM)", "PR(PPM)", "Ce_anomaly"),
+        ]:
+            anomaly = log36[:, positions[numerator]] - 0.5 * (
+                log36[:, positions[left]] + log36[:, positions[right]]
+            )
+            parts.append(anomaly[:, None])
+            names.append(name)
+        features = np.column_stack(parts).astype(np.float32)
     if features.shape[1] != 74:
         raise RuntimeError("D36_74特征维数错误。")
     return features, names
@@ -192,21 +201,53 @@ def canonicalize_input(frame: pd.DataFrame) -> pd.DataFrame:
         column = _find_column(source, [canonical, short])
         if column is None:
             missing.append(canonical)
+            output[canonical] = np.nan
             continue
         output[canonical] = pd.to_numeric(source[column], errors="coerce")
-    if missing:
-        raise ValueError("输入表缺少D36列：\n" + "、".join(missing))
 
-    invalid = ~np.isfinite(output[E36].to_numpy(float)) | (
-        output[E36].to_numpy(float) <= 0
-    )
+    values = output[E36].to_numpy(float)
+    invalid = np.isfinite(values) & (values <= 0)
     if invalid.any():
         row_index, column_index = np.argwhere(invalid)[0]
         sample = output.iloc[int(row_index)]["Sample_ID"]
         element = E36[int(column_index)]
         value = output.iloc[int(row_index)][element]
         raise ValueError(
-            f"样品 {sample} 的 {element}={value!r} 无效；D36要求36列全部为有限正数。"
+            f"样品 {sample} 的 {element}={value!r} 无效；已测量的元素必须为有限正数，未测量请留空。"
+        )
+
+    # 最低覆盖：全部10项主量 + 至少8项微量（共≥18项实测，D18 下限）。
+    majors_ok = np.isfinite(values[:, :10]).all(axis=1)
+    n_traces = np.isfinite(values[:, 10:]).sum(axis=1)
+    n_measured = np.isfinite(values).sum(axis=1)
+    coverage_ok = majors_ok & (n_traces >= MIN_TRACES_MEASURED)
+    if missing and len(missing) >= len(E36) - MIN_MEASURED + 1:
+        raise ValueError(
+            "输入表几乎不含元素列：至少需要 "
+            f"全部10项主量加{MIN_TRACES_MEASURED}项微量（共≥{MIN_MEASURED}项）。"
+        )
+    if not coverage_ok.all():
+        row_index = int(np.flatnonzero(~coverage_ok)[0])
+        sample = output.iloc[row_index]["Sample_ID"]
+        lack_major = [
+            E36[i] for i in range(10) if not np.isfinite(values[row_index, i])
+        ]
+        detail = []
+        if lack_major:
+            detail.append("缺少主量：" + "、".join(lack_major))
+        if n_traces[row_index] < MIN_TRACES_MEASURED:
+            lack_traces = [
+                E36[i] for i in range(10, len(E36))
+                if not np.isfinite(values[row_index, i])
+            ]
+            detail.append(
+                f"微量仅实测{int(n_traces[row_index])}项（需≥{MIN_TRACES_MEASURED}），"
+                "未测量：" + "、".join(lack_traces[:12]) + ("……" if len(lack_traces) > 12 else "")
+            )
+        raise ValueError(
+            f"样品 {sample} 覆盖不足（实测{n_measured[row_index]}/36项）："
+            + "；".join(detail)
+            + f"。最低要求：全部10项主量加≥{MIN_TRACES_MEASURED}项微量。"
         )
 
     lat_column = _find_column(source, ["Latitude", "Lat", "纬度"])
@@ -393,15 +434,23 @@ class D36Engine:
         return probability, usable
 
     def _distance_matrix(self, chemistry: np.ndarray) -> np.ndarray:
-        query = np.log10(np.asarray(chemistry, dtype=float)).astype(np.float64)
+        raw = np.asarray(chemistry, dtype=float)
+        with np.errstate(invalid="ignore", divide="ignore"):
+            query = np.where(
+                np.isfinite(raw), np.log10(np.where(np.isfinite(raw), raw, 1.0)), np.nan
+            ).astype(np.float64)
         library = self.train_log36.astype(np.float64, copy=False)
+        observed = np.isfinite(query)
+        observed_count = observed.sum(axis=1)
+        query_zeroed = np.where(observed, query, 0.0)
         squared = (
-            np.sum(query * query, axis=1)[:, None]
+            np.sum(query_zeroed * query_zeroed, axis=1)[:, None]
             + np.sum(library * library, axis=1)[None, :]
-            - 2.0 * query @ library.T
+            - 2.0 * query_zeroed @ library.T
         )
         np.maximum(squared, 0.0, out=squared)
-        return np.sqrt(squared) / math.sqrt(len(E36))
+        distance = np.sqrt(squared) / np.sqrt(np.maximum(observed_count, 1)[:, None])
+        return distance
 
     def _group_rankings(
         self,
@@ -511,12 +560,14 @@ class D36Engine:
         entropy = -np.sum(
             probability * np.log(np.clip(probability, 1e-12, 1.0)), axis=1
         ) / math.log(len(CLASSES))
+        measured_count = np.isfinite(table[E36].to_numpy(float)).sum(axis=1)
 
         probability_table = pd.DataFrame(
             {
                 "样品编号": table["Sample_ID"].astype(str),
                 "预测环境": labels,
                 "预测环境中文": [CLASS_CN[label] for label in labels],
+                "实测元素数": measured_count.astype(int),
                 "最高概率": probability.max(axis=1),
                 "次高环境": second,
                 "前两类概率差": probability[np.arange(len(table)), descending[:, 0]]
@@ -524,11 +575,11 @@ class D36Engine:
                 "归一化熵": entropy,
                 "推理路径": np.where(
                     spatial_used,
-                    "GeoSinglePrior-D36-v1（D36_74+坐标先验）",
+                    "GeoSinglePrior-D36-v2（缺测感知；D36_74+坐标先验）",
                     np.where(
                         use_spatial_prior,
-                        "D36_74（三成员；坐标缺失回退）",
-                        "D36_74（三成员；纯化学）",
+                        "GeoSinglePrior-D36-v2（缺测感知；坐标缺失回退）",
+                        "GeoSinglePrior-D36-v2（缺测感知；纯化学）",
                     ),
                 ),
             }
@@ -556,7 +607,7 @@ class D36Engine:
         )
         audit = {
             "generated_at": datetime.now().astimezone().isoformat(),
-            "application": "D36未知样品构造环境判别工具-v1.0",
+            "application": "D36未知样品构造环境判别工具-v1.1",
             "input_rows": int(len(table)),
             "classes": CLASSES,
             "probability_rows_sum_to_one": bool(
@@ -564,7 +615,9 @@ class D36Engine:
             ),
             "every_valid_sample_hard_labeled": bool(len(labels) == len(table)),
             "test_rejection": False,
-            "model": "frozen three-member D36_74 ensemble",
+            "model": "frozen three-member D36_74 ensemble (GeoSinglePrior-D36-v2)",
+            "missing_input_support": self.bundle.get("missing_input_support"),
+            "minimum_coverage": "all 10 major oxides + at least 8 trace elements (>= 18 measured)",
             "bundle_status": self.bundle["status"],
             "bundle_sha256": self.bundle["bundle_content_sha256"],
             "spatial_prior_requested": bool(use_spatial_prior),
@@ -575,7 +628,7 @@ class D36Engine:
             "region_ranking_rows": int(len(region)),
             "reference_ranking_rows": int(len(reference)),
             "retrieval_library_sha256": self.index_sha256,
-            "similarity_definition": "100 * 10^(-mean per-query nearest-3 log10-RMS36 distance)",
+            "similarity_definition": "100 * 10^(-mean per-query nearest-3 log10-RMS distance over measured elements only)",
             "similarity_scope": "chemical-space retrieval only; not probability of geographic or bibliographic origin",
         }
         return AnalysisResult(

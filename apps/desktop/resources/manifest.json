@@ -1,82 +1,78 @@
 {
-  "version": "1.0.2",
-  "model": "GeoSinglePrior-D36-v1",
-  "model_training_rows": 16076,
-  "retrieval_library_rows": 16346,
+  "version": "1.1.0",
+  "model": "GeoSinglePrior-D36-v2",
+  "model_training_rows": 32910,
+  "retrieval_library_rows": 16455,
   "archives": [
     {
-      "file": "d36_full_seed_20261005.zip",
-      "bytes": 6582892,
-      "sha256": "eee5781e75abca478d229249a34d9eabe5ba27bcc7400cfe3cf9e8efcb6bfac5"
+      "file": "d36_v2_seed_20261118.zip",
+      "bytes": 6737006,
+      "sha256": "6e31cb3f022f961708d496be62b003e1aa7b0ce08288061b3d3b094a1194a875"
     },
     {
-      "file": "d36_full_seed_20261006.zip",
-      "bytes": 6588525,
-      "sha256": "9031c2246d1850781e1c57d2e8b3a5f3f7d447f45e5798ba3243ae8f6c650fc8"
+      "file": "d36_v2_seed_20261119.zip",
+      "bytes": 6742197,
+      "sha256": "881d1549e2a8dfff143137c64aea5e6fa5e5130e68b305027e6e960af0f7bffb"
     },
     {
-      "file": "d36_full_seed_20261007.zip",
-      "bytes": 6590244,
-      "sha256": "6327343fc8b4082caeb2d5f513cf05805b774f1358e590f5cbc592ab5591de0f"
+      "file": "d36_v2_seed_20261120.zip",
+      "bytes": 6736804,
+      "sha256": "0a92d127ccfc0fc59eb436aac16fb8f10fc02bec9b443d91758dcb4600eb208f"
     },
     {
       "file": "support.zip",
-      "bytes": 2428686,
-      "sha256": "047024291d078157fdb9a271a4b8da74072ebc96ddcdb4308f3e4feebb8ec9ea"
+      "bytes": 2639415,
+      "sha256": "a7cf05c418831d789a8d2edac002ef931de0048bf084ff59871b0aa2eb68d6d4"
     }
   ],
   "files": [
     {
-      "path": "geosingle_bundle/d36_full_seed_20261005.txt",
-      "sha256": "f02105d8afd1006796e45f61bdbeafd34dde43861c58e9c7c3751b49a50f3273"
+      "path": "geosingle_bundle/d36_v2_seed_20261118.txt",
+      "sha256": "1f767dac8afa6948f9d2a0f09884b1de25c1f0776d47e1954f25cde6f491b737"
     },
     {
-      "path": "geosingle_bundle/d36_full_seed_20261006.txt",
-      "sha256": "3077ac4fe736d228add2da4edc08fe622b522909df2545efc13f6ed0e7859bc2"
+      "path": "geosingle_bundle/d36_v2_seed_20261119.txt",
+      "sha256": "38e00afdf8afdab585912c87ba4c1e291bd90ef6f46b5cc90294eeb7c2f4ed46"
     },
     {
-      "path": "geosingle_bundle/d36_full_seed_20261007.txt",
-      "sha256": "391cc141d3133b7bb698aa478569accf0a5a1bf0e6cdad36d3314272d9853253"
+      "path": "geosingle_bundle/d36_v2_seed_20261120.txt",
+      "sha256": "b2e1183dcc69e39a6459d4a91f6dca315079603b080c4d5376815cdb74a3c0d4"
     },
     {
       "path": "geosingle_bundle/bundle.json",
-      "sha256": "4655c2603b0da526340891eb7e8a34f20fc15ba09a68cb38f19b81a90e17bd63"
+      "sha256": "d832e8592c244024f411a6374c8e1cf99a62db61f2eb5412f5d479628c43e4c6"
     },
     {
       "path": "geosingle_bundle/example_input.csv",
-      "sha256": "dc76be153b7028356b9b943249867b56f92ebf0284030f3c2504ad9d51f23d3e"
+      "sha256": "3ae9eea3904e7bb878fa1bdefa782ba2a21a69d4581e9ad5962a75ae41bbc51f"
     },
     {
       "path": "geosingle_bundle/example_predictions.csv",
-      "sha256": "6b80199ae90923faae0aed22729fab1a4d92fd1e2940a1da5435d29795450766"
+      "sha256": "69bbf08ddd1ba4bc6c0d402f1b72a6866ae38e15eed9825aad5a82a8ef624ab4"
     },
     {
       "path": "geosingle_bundle/example_predictions.csv.audit.json",
-      "sha256": "ee7aed30018bdb2fede57f842d73dd7894af99fd46bc5186cf7344b49f556547"
+      "sha256": "6c8628391388e96eae42dc91a32ab78490fa44602ee6206892c6fdb06fd6377a"
     },
     {
       "path": "geosingle_bundle/province_spatial_library.npz",
-      "sha256": "5b76ebd7e31c71d074892dd8c740d97653f4db6a1c91f6b0df30dcd15ac815b7"
+      "sha256": "7600e7501486b5cc10f2811a23ffdc68cd454c18ddfaf6bece9490de1ec8b95a"
     },
     {
       "path": "geosingle_bundle/README.md",
-      "sha256": "275914527df2355673a587bfcae2f91e6ae25727a766fc1474a4b7925787df17"
-    },
-    {
-      "path": "geosingle_bundle/validation_replay.json",
-      "sha256": "afe29fa0cd70eecfb1ec20e14034c6f0e88b43f3e1de00a0bd863178675514fb"
+      "sha256": "d3ab3c8bf090118ad85dad8045f53c751f9bd054843bec47b2394f1a7d9fd1d0"
     },
     {
       "path": "geosingle_bundle/verification.json",
-      "sha256": "35c925004725e3c5d9fb89d5ad380c4a21a7a73b18a0f962194d9a2bb9f06c6a"
+      "sha256": "4f84f71ddb618f8f56b723250f08ebbe4631b367e7907c0be7a977fe1afa5d52"
     },
     {
       "path": "retrieval_library_v1.json",
-      "sha256": "24db0a8d473a20909591a7875b0148524e6ffd870d7c4d51fb89d74cb5f0a4c7"
+      "sha256": "82f978642cff409e7f3bf3eb0f755a4c05c8b08c56441f20d944919149f294a9"
     },
     {
       "path": "retrieval_library_v1.npz",
-      "sha256": "762c8a0671b500152d173c8c36c380c31f9f3f9c080d28af6461b46d5c0c4790"
+      "sha256": "15b0b1b50069bb9d6c6b9002c13645565073e7dc9155b1f6ad1c4f7e37ef0063"
     }
   ]
 }
