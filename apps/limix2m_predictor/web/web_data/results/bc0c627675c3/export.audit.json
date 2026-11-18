@@ -1,0 +1,31 @@
+{
+  "generated_at": "2026-11-18T20:43:23.839857+08:00",
+  "application": "LimiX-2M构造环境判别工具-v1.0",
+  "model": "LimiX-2M (in-context, frozen reference context)",
+  "device": "cuda",
+  "context_budget": 1024,
+  "inference_seconds": 2.6595827999990433,
+  "input_rows": 5,
+  "minimum_coverage": "all 10 major oxides + at least 8 trace elements (>= 18 measured)",
+  "probability_rows_sum_to_one": true,
+  "classes": [
+    "BAB",
+    "CA",
+    "CFB",
+    "CR",
+    "IA",
+    "IOA",
+    "MOR",
+    "OI",
+    "OP"
+  ],
+  "context_source_sha256": "438f485db219a5c24090141561e28377e20fe7927094ffcddac11d70b67ee772",
+  "checkpoint_sha256": "16f385d5201dc17cd6a8eb18becb0b4f8b3603838423b9f06062106acc965513",
+  "retrieval_library_rows": 16455,
+  "retrieval_library_sha256": "15b0b1b50069bb9d6c6b9002c13645565073e7dc9155b1f6ad1c4f7e37ef0063",
+  "similarity_definition": "100 * 10^(-mean per-query masked log10-RMS distance over measured elements)",
+  "similarity_scope": "chemical-space retrieval only; not probability of geographic or bibliographic origin",
+  "scope": "research software; probabilities should be interpreted with sample context",
+  "result_id": "bc0c627675c3",
+  "elapsed_seconds": 2.809
+}

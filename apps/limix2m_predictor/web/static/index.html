@@ -101,6 +101,23 @@ const $ = (sel) => document.querySelector(sel);
 const statusEl = $("#status"), errorEl = $("#error");
 let lastResult = null;
 
+function getToken() { return localStorage.getItem("limix_token") || ""; }
+async function apiFetch(url, options = {}) {
+  const headers = Object.assign({}, options.headers || {});
+  if (getToken()) headers["X-Access-Token"] = getToken();
+  const resp = await fetch(url, Object.assign({}, options, { headers }));
+  if (resp.status === 401) {
+    const token = prompt("本服务需要访问口令，请输入：");
+    if (token) {
+      localStorage.setItem("limix_token", token);
+      const retryHeaders = Object.assign({}, options.headers || {});
+      retryHeaders["X-Access-Token"] = token;
+      return fetch(url, Object.assign({}, options, { headers: retryHeaders }));
+    }
+  }
+  return resp;
+}
+
 function setStatus(text) { statusEl.textContent = text; }
 function setError(text) { errorEl.textContent = text || ""; }
 function fmt(value) {
@@ -134,7 +151,7 @@ async function analyzeFile(file) {
   setStatus(`正在上传并分析 ${file.name} …`);
   $("#btn-export").disabled = true;
   try {
-    const resp = await fetch("/api/analyze/file", { method: "POST", body: form });
+    const resp = await apiFetch("/api/analyze/file", { method: "POST", body: form });
     const data = await resp.json();
     if (!resp.ok) throw new Error(data.detail || resp.statusText);
     showResult(data);
@@ -145,8 +162,8 @@ async function loadExample() {
   setStatus("正在分析示例…");
   $("#btn-export").disabled = true;
   try {
-    const rows = (await (await fetch("/api/example")).json()).rows;
-    const resp = await fetch("/api/analyze/json", {
+    const rows = (await (await apiFetch("/api/example")).json()).rows;
+    const resp = await apiFetch("/api/analyze/json", {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ rows }) });
     const data = await resp.json();
@@ -155,12 +172,32 @@ async function loadExample() {
   } catch (e) { setError("分析失败：" + e.message); setStatus("分析失败。"); }
 }
 
+async function downloadFile(url, fallbackName) {
+  const resp = await apiFetch(url);
+  if (!resp.ok) {
+    const detail = await resp.json().catch(() => ({}));
+    throw new Error(detail.detail || resp.statusText);
+  }
+  const blob = await resp.blob();
+  const cd = resp.headers.get("Content-Disposition") || "";
+  const match = cd.match(/filename\*?=(?:UTF-8''|")?([^";]+)/i);
+  const name = match ? decodeURIComponent(match[1]) : fallbackName;
+  const anchor = document.createElement("a");
+  anchor.href = URL.createObjectURL(blob);
+  anchor.download = name;
+  anchor.click();
+  URL.revokeObjectURL(anchor.href);
+}
+
 $("#btn-file").onclick = () => $("#file").click();
 $("#file").onchange = () => { if ($("#file").files[0]) analyzeFile($("#file").files[0]); $("#file").value = ""; };
 $("#btn-example").onclick = loadExample;
-$("#btn-template").onclick = () => { window.location = "/api/template"; };
+$("#btn-template").onclick = () =>
+  downloadFile("/api/template", "LimiX2M未知样品输入模板.csv").catch(e => setError("下载失败：" + e.message));
 $("#btn-export").onclick = () => {
-  if (lastResult) window.location = "/api/export/" + lastResult.id;
+  if (lastResult)
+    downloadFile("/api/export/" + lastResult.id, "LimiX2M未知样品分析.xlsx")
+      .catch(e => setError("导出失败：" + e.message));
 };
 document.querySelectorAll(".tabs button").forEach(btn => {
   btn.onclick = () => {
