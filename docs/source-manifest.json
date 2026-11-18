@@ -1,0 +1,139 @@
+{
+  "source_date": "2026-11-18",
+  "entry_points": [
+    "run_limix2m_geology_paper",
+    "run_limix2m_geology_isotopes",
+    "run_limix2m_panel_control",
+    "run_limix2m_geology_baselines",
+    "run_limix2m_geology_expansion",
+    "audit_limix2m_geology_paper",
+    "plot_limix2m_geology_paper",
+    "plot_limix2m_geology_isotopes",
+    "plot_limix2m_panel_control",
+    "plot_current_basalt_classification",
+    "write_limix2m_geology_paper",
+    "revise_limix2m_geology_manuscript"
+  ],
+  "files": [
+    {
+      "file": "src/audit_limix2m_geology_paper.py",
+      "source_sha256": "a68bacc1b18655a01c0ecc243b496317577aef211cac9712a8c9be719a83a441",
+      "repository_sha256": "3080964d20f37c9bfe6987d28d36aa45d8143ab34c1a7cc6ecb74fa885ea8147"
+    },
+    {
+      "file": "src/build_d36_isotope_pilot_2026_11_13.py",
+      "source_sha256": "1120480a017c8f7d6d50581462bf38f2a0558ae0bfdee9742f8054f674cf0690",
+      "repository_sha256": "964ce3e5820b1bcda05e36e55b787c71d14a58f14cd64427d252528f08687dd2"
+    },
+    {
+      "file": "src/clean_and_rerun_d36_2026_10_08.py",
+      "source_sha256": "9f652f4b62db8a63f247072d789ca10dfb4a5cdc7df13fac4848e879ad38db1d",
+      "repository_sha256": "f77393b7c563e91641a25ae7148b5408371e5a296a7a9c1c6ccd2c2673134b5a"
+    },
+    {
+      "file": "src/d22_process_common_2026_10_19.py",
+      "source_sha256": "fbee6163e473038ee3bccbb79f680d31aa661c49deb4d49f00d307e9c4c35dac",
+      "repository_sha256": "d927a6e1e35cb2ab8078342e13a10c16fae4217d8043172e4599d54fc80b09e1"
+    },
+    {
+      "file": "src/expand_local_isotope_cohorts_2026_11_13.py",
+      "source_sha256": "905f7806a489935cd5b99f2433a4f75619fcdc1a27e49b9fcd3edd59f7c05781",
+      "repository_sha256": "d39491931bf8f5866ddb67e4208f00af12ad625cacbef03e12f3a710a470d496"
+    },
+    {
+      "file": "src/incomplete_pool_fixed_test_2026_10_01.py",
+      "source_sha256": "4f65596c21450beb951e06ab69eebb382abb7a3231056949050a3cf81d0690c0",
+      "repository_sha256": "4f65596c21450beb951e06ab69eebb382abb7a3231056949050a3cf81d0690c0"
+    },
+    {
+      "file": "src/plot_current_basalt_classification.py",
+      "source_sha256": "3576a60d6e38f630d4e38cf850960c21ce262bfa97be2ec1918d2aad4a7fd162",
+      "repository_sha256": "a410bece710fe82ab07b4abe64c87e80d8cc894af4c9d92e48953cdcdd594e9a"
+    },
+    {
+      "file": "scripts/plot_doucet_afm_ree.py",
+      "source_sha256": "95c543765533bd571b6d3cd351b8c90c6fc94674b41409a235b50e51bcc849a7",
+      "repository_sha256": "9e3102d3e5df59ea4acc894a861a2025a3afe69525bcc1f8e330d9accdd55349"
+    },
+    {
+      "file": "src/plot_limix2m_geology_isotopes.py",
+      "source_sha256": "e343943358747da1b2593ce51e0d635608f3041e07911654e11be5e28e8b7cdb",
+      "repository_sha256": "9aed5642dbbacafc34193d23a23c42ac161fa174445049a5c033b71f8d307834"
+    },
+    {
+      "file": "src/plot_limix2m_geology_paper.py",
+      "source_sha256": "be64d806c7b153524329d49c8818138c84c49b1cb199a155ce5c0af58d538dfe",
+      "repository_sha256": "de293ca9352e57c5e0d6aea16387811fd2d48fdbd8f6b29f77f1d763f71d9fd7"
+    },
+    {
+      "file": "src/plot_limix2m_panel_control.py",
+      "source_sha256": "6344eee7eace1485b84206aa04c9edd8e65157f7d4ef23ecf745ecd2e32cb3b1",
+      "repository_sha256": "bb5a4313148ae604cd685e8b696aa23e6d7649b8ee0896f6cfd9f8b0116204f3"
+    },
+    {
+      "file": "src/revise_limix2m_geology_manuscript.py",
+      "source_sha256": "08f01a91124a2575c446ed80c21f646dfab917b7043d1e5df879816d5c277478",
+      "repository_sha256": "c3b8afa996c1a7b8fa4254717809a2a1ba40ebfc687db06f37ce638c1568c41e"
+    },
+    {
+      "file": "src/run_d22_srnd_native_nan_2026_11_13.py",
+      "source_sha256": "061976fd152ced54be5e10b905cd40b68dbec951ce8ba5f4b9dc907ecfc96471",
+      "repository_sha256": "712f99e9a29a479974966e1479ae42468cc7db04d2bbb35613485d0ffe62cb0a"
+    },
+    {
+      "file": "src/run_d22_srnd_pattern_submodels_2026_11_13.py",
+      "source_sha256": "f0098801775d4230031f589673fccb518d4bccca43a883a1c2f15db681d0934d",
+      "repository_sha256": "64af268ad021b03ad544af4664a21566710fee4a79fbcd9b6000bb6651a2bb05"
+    },
+    {
+      "file": "src/run_d36_srnd_partial_chemistry_2026_11_13.py",
+      "source_sha256": "95414f50d1f4a7b90aa64767e83c698f763e73e9c5457d49e1fd09d2fc0f7b81",
+      "repository_sha256": "d5a85b2a0ea033694f10bab0bcd60531dea291915f8238bbef8d8a8c29f4868d"
+    },
+    {
+      "file": "src/run_d36_srnd_pb_2026_11_13.py",
+      "source_sha256": "9219af9b859ebb108a20653a05b112dd5ddc4c43068330104df794c6919771df",
+      "repository_sha256": "cb95d50401d1993a701d47024e8e1c535ac85bca93181e8a241871ee5a53ac08"
+    },
+    {
+      "file": "src/run_limix2_d36.py",
+      "source_sha256": "4c1530bd976e422dbafbb57ad74c6e94b16adeb508ccca746a9d68994d36f374",
+      "repository_sha256": "f6651c6ee2de0cf3f854a1cf04543d8b14ab9d76e60be93114b1d61793774301"
+    },
+    {
+      "file": "src/run_limix2m_geology_baselines.py",
+      "source_sha256": "ddcff7534024d0e2092306f75255f34b49acab605e058d1de9a4f6d21419190f",
+      "repository_sha256": "b8715e52fd1fddf6acaab5a18f8f0419c27ae68eec1bac3fbf9adc44ca66e07e"
+    },
+    {
+      "file": "src/run_limix2m_geology_expansion.py",
+      "source_sha256": "eb48a12b2e734b6895ce47b2dfbf6a7ed06cce2a74baff4504a46da24a3aa2aa",
+      "repository_sha256": "31767c0499bb4631964503a9511f18199b50f4fcb5a482d4022f8368a0b6a3d2"
+    },
+    {
+      "file": "src/run_limix2m_geology_isotopes.py",
+      "source_sha256": "21a34baa3639737170524091101c3a688cfaa0818a8c2bd335438d02cafee60b",
+      "repository_sha256": "0c766b0bbc802b64e3113a0260c62887fbbba223e87c891c7886ed6c8707b802"
+    },
+    {
+      "file": "src/run_limix2m_geology_paper.py",
+      "source_sha256": "8b9206b1719c3b3219235b8342540cfd55ef25a12903ef870bc434a94d300b61",
+      "repository_sha256": "2719f3ebc73524bf76303896166263440c3566aea9adce8b7f71b9d720c7bca7"
+    },
+    {
+      "file": "src/run_limix2m_missing_d36.py",
+      "source_sha256": "7ec2074d2460d5ac556d30ef731dbf72a56c1f9f182aefe2ad793551c8c682c8",
+      "repository_sha256": "d8e0dd581423bcec1045983c325e832d76193a46871c797129043789fba817d6"
+    },
+    {
+      "file": "src/run_limix2m_panel_control.py",
+      "source_sha256": "9c93cc0307d2d2be65e27ab2b8efe9f89d7cd6083a5356e7e1b745805caaf35f",
+      "repository_sha256": "7ccdc971dee87e229b179c038a89f7f31c841f9b1bb0e06377e554e00a1d3314"
+    },
+    {
+      "file": "src/write_limix2m_geology_paper.py",
+      "source_sha256": "3ca241f90cca5ebd7f0a95397e4bfaed082feee0c23b9070596f5072f3e2ad70",
+      "repository_sha256": "3dbc1e5a48552084a0c73f23a76c76b73b0d47707fa1d573c3dbe78581df7e4a"
+    }
+  ]
+}

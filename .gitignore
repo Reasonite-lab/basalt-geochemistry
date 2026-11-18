@@ -1,0 +1,36 @@
+# Local environments and credentials
+.venv*/
+venv/
+.env
+.env.*
+!.env.example
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.DS_Store
+Thumbs.db
+
+# Research data, checkpoints and generated outputs
+data/
+models/
+reports/
+figures/
+delivery/
+.codex_tmp/
+**/assets/
+**/outputs/
+*.ckpt
+*.pt
+*.pth
+*.npz
+*.parquet
+*.csv.gz
+*.log
+
+# Builds and runtime artifacts
+node_modules/
+build/
+dist/
+*.exe
+*.msi
+*.spec
