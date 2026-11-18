@@ -5,9 +5,10 @@
 
 ## 运行
 
-- 需要 Windows 10/11 64 位 + NVIDIA GPU（已装 CUDA 驱动）；无 GPU 时自动回退 CPU（较慢）。
-- 双击 `LimiX2MPredictor.exe` 启动。首次分析自动加载模型（数十秒）。
-- 本软件为本地研究版，未上传发行。
+- 发布版适用于 Windows 10/11 64 位，无需安装 Python 或配备显卡。
+- 完整解压 CPU 版 ZIP，双击 `LimiX2MPredictor_CPU.exe`。请保留同目录的 `_internal` 文件夹。
+- 首次分析自动加载模型；CPU 推理耗时取决于样品数量与处理器。
+- GPU 版本地构建入口为 `tools/build_local.py`，不作为 GitHub 发行包。
 
 ## 输入
 
@@ -30,7 +31,7 @@
 
 检索基于化学空间距离，仅表示成分相似性，不构成地理或文献来源的概率判定。三个表均随 Excel 一并导出。
 
-**指标解释**：对每条查询样品，只在其实测元素上计算与检索库样品的 log10 浓度均方根（RMS）距离，再对全部查询样品取平均，得到 log10_RMS 距离；相似指数 = 100×10^(−距离)，100 表示完全相同。地区/文献排名采用两级聚合：每组取组内最近的 3 个样品求距离均值，再对全部查询样品平均后排序，因此组排名的相似指数通常高于单个样品。
+**指标解释**：对每条查询样品，只在其实测元素上计算与检索库样品的 log10 浓度均方根（RMS）距离，再对全部查询样品取平均，得到 log10_RMS 距离；相似指数 = 100×10^(−距离)，100 表示完全相同。地区/文献排名采用两级聚合：每组取组内最近的 3 个样品求距离均值，再对全部查询样品平均后排序。
 
 ## 界面操作
 
@@ -53,3 +54,15 @@
 - 概率解释应结合样品地质背景；本工具是研究软件，输出不构成确定性的成因判定。
 - 参考上下文、检查点与上游推理代码均已冻结并本地打包（校验和见 assets 元数据）。
 - 与 D36 工具（GeoSinglePrior-D36-v2，LightGBM）互为对照；两者类别定义一致。
+
+## 从源码构建 CPU 版
+
+使用独立的 Windows x64 Python 3.12 环境，安装 `requirements-cpu.txt`，准备上述冻结资源后运行：
+
+```powershell
+python -m pip install -r apps/limix2m_predictor/requirements-cpu.txt
+python -m unittest discover -s apps/limix2m_predictor/tests -v
+python apps/limix2m_predictor/tools/build_cpu.py
+```
+
+构建脚本核对 CPU 运行库，并运行 EXE 冻结概率回放与界面分析/导出检查。构建检查不构成独立地质验证准确率。

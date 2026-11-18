@@ -11,6 +11,7 @@
 | `src/` | 本轮 LimiX-2M、LightGBM、XGBoost、CatBoost、随机森林的实验、审计与出图，以及所需项目模块 |
 | `scripts/` | AFM 和稀土元素图的绘图依赖 |
 | `apps/desktop/` | 已有桌面预测器的界面、预测核心、资源准备程序及输入模板 |
+| `apps/limix2m_predictor/` | LimiX-2M 桌面工具、CPU 打包入口及共享推理核心的本地网页 demo |
 | `presentation/` | 配套研究汇报的生成程序 |
 | `docs/` | 预测软件与网站的开发安排、源文件校验清单 |
 
@@ -36,7 +37,9 @@ python -m venv .venv
 .venv/Scripts/python apps/desktop/d36_predictor_gui.pyw
 ```
 
-桌面版本当前要求 36 项有限正数，最多一次处理 500 件样品。LimiX-2M 及真实缺测预测已在研究实验中运行，接入桌面程序和网站属于后续开发工作。
+已有两套桌面工具：D36 使用 GeoSinglePrior-D36-v2（LightGBM），LimiX-2M 使用冻结参考上下文推理。两者都支持缺测输入，最低要求全部 10 项主量加至少 8 项微量元素，最多一次处理 500 件样品。LimiX-2M 的本地网页 demo 与桌面版共用推理核心，运行方法见 `apps/limix2m_predictor/README.md`。
+
+Windows 发行包见 [GitHub Releases](https://github.com/Reasonite-lab/basalt-geochemistry/releases)。LimiX-2M 采用 CPU 便携包；GPU 版仅保留本地构建。
 
 ## 当前实验入口
 

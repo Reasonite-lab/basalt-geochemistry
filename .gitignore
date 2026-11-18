@@ -34,3 +34,4 @@ dist/
 *.exe
 *.msi
 *.spec
+**/.codex_selftest/

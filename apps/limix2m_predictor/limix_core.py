@@ -228,6 +228,7 @@ class LimiX2MEngine:
             device=torch.device(self.device),
             model_path=str(CHECKPOINT_PATH.resolve()),
             inference_config=config,
+            mix_precision=self.device == "cuda",
             seed=20261118,
         )
 
@@ -260,7 +261,7 @@ class LimiX2MEngine:
         query_zeroed = np.where(observed, query, 0.0)
         squared = (
             np.sum(query_zeroed * query_zeroed, axis=1)[:, None]
-            + np.sum(library * library, axis=1)[None, :]
+            + observed.astype(np.float64) @ (library * library).T
             - 2.0 * query_zeroed @ library.T
         )
         np.maximum(squared, 0.0, out=squared)

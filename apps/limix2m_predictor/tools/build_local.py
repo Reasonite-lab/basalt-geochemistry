@@ -15,7 +15,7 @@ import time
 from pathlib import Path
 
 APP = Path(__file__).resolve().parents[1]
-ROOT = APP.parents[2]
+ROOT = APP.parents[1]
 DIST_PARENT = Path(r"D:\AI地学\delivery")
 
 
